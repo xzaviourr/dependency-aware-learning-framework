@@ -1,0 +1,17 @@
+[project]
+name = "learningframework"
+version = "0.1.0"
+description = "Educational learning framework for building projects with dependency-based progression"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pytest>=7.0.0",
+    "networkx>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]

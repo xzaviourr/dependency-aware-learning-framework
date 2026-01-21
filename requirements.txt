@@ -1,0 +1,11 @@
+# Core dependencies for the Learning Framework
+pytest>=7.0.0
+networkx>=3.0
+
+# Optional development dependencies
+pytest-cov>=4.0.0
+black>=23.0.0
+ruff>=0.1.0
+
+# For movie recommendation example
+numpy>=1.20.0
