@@ -5,6 +5,7 @@
 An educational framework that enables instructors to create hands-on learning experiences where students implement functions step-by-step, with automatic dependency tracking, progress visualization, and smart test management.
 
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 ## 🌟 Features
 
@@ -72,6 +73,20 @@ def test_create_user_table():
 3. **Progress Tracking** - Results saved in `.learning_framework/test_results.json`
 4. **Auto-Visualization** - `progress.md` regenerates after every `pytest` run in each project directory
 
+```mermaid
+flowchart LR
+  Project[Decorated project functions] --> Discovery[Project discovery]
+  Tests[Marked pytest tests] --> Plugin[Pytest hooks]
+  Discovery --> Registry[Module registry]
+  Registry --> Plugin
+  Plugin --> Dependencies{Prerequisites passed?}
+  Dependencies -->|yes| Run[Run module test]
+  Dependencies -->|no| Skip[Keep module locked]
+  Run --> Tracker[Persist result]
+  Skip --> Tracker
+  Tracker --> Progress[Markdown + Mermaid progress]
+```
+
 ## 📊 Progress Visualization
 
 Each project gets `projects/<project_name>/progress.md` with:
@@ -85,8 +100,8 @@ Each project gets `projects/<project_name>/progress.md` with:
 ## 🔧 Installation
 
 ```bash
-git clone <repo-url>
-cd LearningFramework
+git clone https://github.com/xzaviourr/dependency-aware-learning-framework.git
+cd dependency-aware-learning-framework
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -106,6 +121,42 @@ python -m framework.cli reset --all      # Reset progress
 python -m framework.cli reset --module <name>  # Reset specific module
 ```
 
+## Project Structure
+
+```text
+framework/
+  decorators.py          module metadata and registry
+  project_discovery.py   project import and discovery
+  test_tracker.py        persisted pass/fail state
+  visualization.py       progress report and dependency graph
+  cli.py                 status, next, path, and reset commands
+projects/
+  movie_recommendation_system/  worked learning project and tests
+conftest.py              pytest collection, locking, and result hooks
+```
+
+## Testing
+
+```bash
+pytest -q
+```
+
+The included movie-recommendation project is intentionally a learning
+exercise: incomplete modules can fail or remain locked until their
+dependencies pass. To perform a dependency-free source check, run:
+
+```bash
+python -m compileall -q framework projects conftest.py
+```
+
+## Project Status and Limitations
+
+This is an early-stage framework with one example project. Module identity is
+currently based on function names in a global registry, so projects should
+avoid duplicate decorated names. Discovery imports project modules and may
+execute their module-level code. Progress is stored locally under
+`.learning_framework/`; reset it before distributing a clean exercise.
+
 ## 📄 License
 
-MIT License
+Released under the [MIT License](./LICENSE).
